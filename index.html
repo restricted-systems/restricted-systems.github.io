@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Franco Belman — restricted.systems</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: #0a0a0a;
+            color: #e0e0e0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Helvetica Neue', sans-serif;
+            height: 100vh;
+            overflow: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        canvas {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+
+        .content {
+            position: relative;
+            z-index: 1;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 3rem;
+        }
+
+        ::selection { background: rgba(255,255,255,0.1); }
+
+        a {
+            color: #555;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        a:hover { color: #e0e0e0; }
+
+        header {
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #333;
+        }
+
+        main { max-width: 520px; }
+
+        h1 {
+            font-size: clamp(2rem, 5vw, 3.2rem);
+            font-weight: 300;
+            letter-spacing: -0.03em;
+            line-height: 1.15;
+            margin-bottom: 1.5rem;
+        }
+
+        p {
+            color: #777;
+            font-size: 1.1rem;
+            font-weight: 300;
+            line-height: 1.7;
+        }
+
+        footer {
+            display: flex;
+            gap: 2rem;
+            align-items: flex-end;
+        }
+
+        .section-title {
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            font-size: 0.6rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #444;
+            margin-bottom: 0.5rem;
+        }
+
+        .research-link {
+            color: #888;
+            font-size: 0.9rem;
+            font-weight: 300;
+            display: block;
+        }
+
+        .research-link:hover { color: #e0e0e0; }
+
+        .links {
+            display: flex;
+            gap: 2rem;
+            font-size: 0.9rem;
+            font-weight: 300;
+        }
+
+        .links a {
+            color: #888;
+        }
+
+        .links a:hover { color: #e0e0e0; }
+
+        .recon {
+            position: fixed;
+            top: 3rem;
+            right: 3rem;
+            z-index: 2;
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            font-size: 0.55rem;
+            letter-spacing: 0.08em;
+            color: #333;
+            text-align: right;
+            line-height: 1.8;
+            pointer-events: none;
+        }
+
+        .recon .welcome {
+            color: #777;
+            font-size: 0.6rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .recon .val {
+            color: #666;
+        }
+
+        @media (max-width: 600px) {
+            .content { padding: 2rem; }
+            footer { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
+            .recon { top: 2rem; right: 2rem; font-size: 0.45rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="bg"></canvas>
+
+    <div class="recon" id="recon"></div>
+
+
+    <div class="content">
+        <header>restricted.systems</header>
+
+        <main>
+            <h1>Franco<br>Belman</h1>
+            <p>Vulnerability research and exploit development.</p>
+
+            <div class="section" style="margin-top: 2.5rem;">
+                <div class="section-title">Contact</div>
+                <nav class="links">
+                    <a href="mailto:franco@restricted.systems">E-Mail</a>
+                    <a href="https://x.com/0xFBFBFBFB">X</a>
+                </nav>
+            </div>
+
+            <div class="section" style="margin-top: 1.5rem;">
+                <div class="section-title">Company</div>
+                <a href="https://blackwinghq.com" class="research-link">Blackwing Intelligence</a>
+            </div>
+
+            <div class="section" style="margin-top: 1.5rem;">
+                <div class="section-title">Research</div>
+                <a href="https://blackwinghq.com/blog/posts/finding-vulnerability-variants-at-scale/" class="research-link">Finding Vulnerability Variants at Scale</a>
+            </div>
+
+            <div class="section" style="margin-top: 1.5rem;">
+                <div class="section-title">Advisories</div>
+                <a href="https://github.com/advisories/GHSA-6r2x-8pq8-9489" class="research-link">CVE-2024-46993 — Electron Heap Buffer Overflow</a>
+            </div>
+        </main>
+
+        <footer></footer>
+    </div>
+
+    <script>
+        const c = document.getElementById('bg');
+        const ctx = c.getContext('2d');
+
+        function resize() {
+            c.width = window.innerWidth * 2;
+            c.height = window.innerHeight * 2;
+            ctx.scale(2, 2);
+        }
+        resize();
+
+        const W = () => c.width / 2;
+        const H = () => c.height / 2;
+
+        // ==============================================
+        // GLYPH FIELD
+        //
+        // Full-screen grid of hex characters.
+        // De Jong attractor runs underneath as an
+        // invisible density field. Where the attractor
+        // is active, glyphs light up and shift.
+        // Where it's quiet, they dim to near-black.
+        // A living terminal watching chaos.
+        // ==============================================
+
+        let tick = 0;
+        const seed = Array.from({ length: 8 }, () => 0.5 + Math.random() * 1.5);
+        const glyphs = '0123456789ABCDEF.:+=-~';
+
+        // attractor instances
+        const attractors = Array.from({ length: 3 }, () => ({
+            x: (Math.random() - 0.5) * 0.5,
+            y: (Math.random() - 0.5) * 0.5
+        }));
+
+        const cellPx = 7;
+        let cols, rows, density;
+
+        function initGrid() {
+            cols = Math.ceil(W() / cellPx);
+            rows = Math.ceil(H() / cellPx);
+            density = new Float32Array(cols * rows);
+        }
+        initGrid();
+
+        function clear() {
+            ctx.fillStyle = '#0a0a0a';
+            ctx.fillRect(0, 0, W(), H());
+        }
+
+        function draw() {
+            const w = W(), h = H();
+            tick++;
+
+            // decay density field
+            for (let i = 0; i < density.length; i++) {
+                density[i] *= 0.92;
+            }
+
+            // run attractor — accumulate hits into density grid
+            const t = tick * 0.0006;
+            const pa = Math.sin(t * seed[0] + seed[4]) * 2.2;
+            const pb = Math.cos(t * seed[1] + seed[5]) * 2.4;
+            const pc = Math.sin(t * seed[2] + seed[6]) * 2.1;
+            const pd = Math.cos(t * seed[3] + seed[7]) * 2.3;
+
+            for (const a of attractors) {
+                for (let i = 0; i < 2000; i++) {
+                    const nx = Math.sin(pa * a.y) - Math.cos(pb * a.x);
+                    const ny = Math.sin(pc * a.x) - Math.cos(pd * a.y);
+                    a.x = nx;
+                    a.y = ny;
+
+                    // map to grid
+                    const gx = Math.floor((nx / 2 + 0.5) * cols * 0.96 + cols * 0.02);
+                    const gy = Math.floor((ny / 2 + 0.5) * rows * 0.96 + rows * 0.02);
+                    if (gx >= 0 && gx < cols && gy >= 0 && gy < rows) {
+                        density[gy * cols + gx] = Math.min(1, density[gy * cols + gx] + 0.08);
+                    }
+                }
+            }
+
+            // render glyph field
+            ctx.fillStyle = '#0a0a0a';
+            ctx.fillRect(0, 0, w, h);
+
+            ctx.font = `5px 'SF Mono', 'Fira Code', monospace`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+
+            for (let gy = 0; gy < rows; gy++) {
+                for (let gx = 0; gx < cols; gx++) {
+                    const d = density[gy * cols + gx];
+                    if (d < 0.01) continue; // skip dead cells
+
+                    const x = gx * cellPx + cellPx * 0.5;
+                    const y = gy * cellPx + cellPx * 0.5;
+
+                    // pick glyph based on density + time for shimmer
+                    const glyphIdx = Math.floor((d * 12 + tick * 0.02 + gx * 0.3 + gy * 0.2) % glyphs.length);
+                    const ch = glyphs[glyphIdx];
+
+                    const brightness = d * d; // quadratic — dark unless really active
+                    const r = Math.floor(160 + brightness * 60);
+                    const g = Math.floor(165 + brightness * 55);
+                    const b = Math.floor(195 + brightness * 30);
+                    const alpha = 0.1 + brightness * 0.7;
+
+                    ctx.fillStyle = `rgba(${r},${g},${b},${alpha})`;
+                    ctx.fillText(ch, x, y);
+                }
+            }
+
+            requestAnimationFrame(draw);
+        }
+
+        window.addEventListener('resize', () => {
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
+            resize();
+            clear();
+        });
+
+        clear();
+        draw();
+
+        // === CLIENT ENUMERATION — no permissions needed ===
+        (async function recon() {
+            const el = document.getElementById('recon');
+            const lines = [];
+
+            // platform & browser
+            const ua = navigator.userAgent;
+            const platform = navigator.platform || 'unknown';
+            const lang = navigator.language || 'unknown';
+            const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            const cores = navigator.hardwareConcurrency || '?';
+            const mem = navigator.deviceMemory ? navigator.deviceMemory + ' GB' : '?';
+            const touch = navigator.maxTouchPoints || 0;
+            const dpr = window.devicePixelRatio || 1;
+            const screen_res = screen.width + 'x' + screen.height;
+            const viewport = window.innerWidth + 'x' + window.innerHeight;
+            const colorDepth = screen.colorDepth + '-bit';
+            const darkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const cookiesEnabled = navigator.cookieEnabled;
+            const dnt = navigator.doNotTrack === '1' ? 'enabled' : 'disabled';
+            const webdriver = navigator.webdriver ? 'yes' : 'no';
+            const connection = navigator.connection;
+            const netType = connection ? (connection.effectiveType || '?') : '?';
+            const downlink = connection ? (connection.downlink + ' Mbps') : '?';
+
+            // GPU via WebGL
+            let gpu = '?';
+            try {
+                const cv = document.createElement('canvas');
+                const gl = cv.getContext('webgl') || cv.getContext('experimental-webgl');
+                if (gl) {
+                    const ext = gl.getExtension('WEBGL_debug_renderer_info');
+                    if (ext) gpu = gl.getParameter(ext.UNMASKED_RENDERER_WEBGL);
+                }
+            } catch(e) {}
+
+            // browser name from UA
+            let browser = 'unknown';
+            if (ua.includes('Firefox/')) browser = 'Firefox';
+            else if (ua.includes('Edg/')) browser = 'Edge';
+            else if (ua.includes('Chrome/') && !ua.includes('Edg/')) browser = 'Chrome';
+            else if (ua.includes('Safari/') && !ua.includes('Chrome/')) browser = 'Safari';
+
+            // OS from UA
+            let os = platform;
+            if (ua.includes('Mac OS')) os = 'macOS';
+            else if (ua.includes('Windows')) os = 'Windows';
+            else if (ua.includes('Linux')) os = 'Linux';
+            else if (ua.includes('Android')) os = 'Android';
+            else if (ua.includes('iPhone') || ua.includes('iPad')) os = 'iOS';
+
+            // deterministic hex ID from immutable hardware fingerprint
+            const fingerprint = `${platform}|${cores}|${gpu}|${screen_res}|${colorDepth}|${lang}|${tz}|${dpr}`;
+            let hash = 0;
+            for (let i = 0; i < fingerprint.length; i++) {
+                hash = ((hash << 5) - hash + fingerprint.charCodeAt(i)) | 0;
+            }
+            hash = Math.abs(hash);
+            const id = '0x' + hash.toString(16).toUpperCase().padStart(8, '0');
+
+            // permission states — reveals prior security decisions
+            const permChecks = ['notifications', 'geolocation', 'camera', 'microphone'];
+            const permStates = {};
+            for (const p of permChecks) {
+                try {
+                    const result = await navigator.permissions.query({ name: p });
+                    permStates[p] = result.state;
+                } catch(e) { permStates[p] = '?'; }
+            }
+
+            // storage — can indicate incognito
+            let storageQuota = '?';
+            try {
+                const est = await navigator.storage.estimate();
+                storageQuota = (est.quota / (1024 * 1024 * 1024)).toFixed(1) + ' GB';
+            } catch(e) {}
+
+            lines.push(`<div class="welcome">Welcome, ${id}</div>`);
+            lines.push(`<span class="val">${browser} · ${os}</span>`);
+            lines.push(`<span class="val">${cores} cores · ${mem} ram</span>`);
+            lines.push(`<span class="val">${screen_res} · ${lang} · ${tz}</span>`);
+            lines.push(`<span class="val">${gpu}</span>`);
+
+            el.innerHTML = lines.join('<br>');
+        })();
+    </script>
+
+</body>
+</html>
