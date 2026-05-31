@@ -206,19 +206,25 @@
       color:var(--link-hover);
     }
 
-    .theme-toggle{display:inline-flex;align-items:center;gap:.18rem;padding:0;margin:0;background:transparent!important;border:0!important;box-shadow:none!important;outline:0!important;border-radius:0!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;line-height:0}
-    .theme-btn{appearance:none;border:0!important;background:transparent!important;padding:0!important;margin:0!important;border-radius:0!important;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:none!important;outline:0!important;line-height:0;opacity:.55;transition:opacity .18s ease}
-    .theme-btn:hover{opacity:.8}
+    .theme-toggle{display:inline-flex;align-items:center;gap:.46rem;padding:0;margin:0;background:transparent!important;border:0!important;box-shadow:none!important;outline:0!important;border-radius:0!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;line-height:1}
+    .theme-btn{appearance:none;border:0!important;background:transparent!important;padding:0!important;margin:0!important;border-radius:0!important;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:none!important;outline:0!important;line-height:1;opacity:.55;transition:opacity .18s ease}
+    .theme-btn:hover{opacity:.78}
     .theme-btn.active{background:transparent!important;opacity:1;box-shadow:none!important;transform:none}
-    .theme-dot{display:block;width:.58rem;height:.58rem;border-radius:50%;box-shadow:none!important}
-    .theme-dot.dark{
-      background:#0a0a0a;
-      border:0;
-      box-shadow:none;
+    .theme-glyph{
+      display:inline-block;
+      font-family:'SF Mono','Fira Code',monospace;
+      font-size:.62rem;
+      line-height:1;
+      letter-spacing:0;
+      color:var(--header);
+      opacity:.62;
+      transform:translateY(.02rem);
+      transition:opacity .18s ease,color .18s ease,text-shadow .18s ease;
     }
-    .theme-dot.light{
-      background:linear-gradient(135deg,#d8e6ee,#aac2d1);
-      border:0;
+    .theme-btn.active .theme-glyph{
+      opacity:.95;
+      color:var(--heading);
+      text-shadow:0 0 8px rgba(120,160,185,.10);
     }
 
     .recon{
@@ -261,7 +267,7 @@
         padding:.84rem .86rem .88rem .78rem;
       }
       .theme-btn{padding:0}
-      .theme-dot{width:.54rem;height:.54rem}
+      .theme-glyph{font-size:.58rem}
       .recon{
         top:2rem;
         right:2rem;
@@ -279,8 +285,8 @@
     <div class="topbar">
       <header></header>
       <div class="theme-toggle" aria-label="Theme switcher">
-        <button class="theme-btn active" id="themeDark" type="button" aria-pressed="true" aria-label="Dark theme"><span class="theme-dot dark"></span></button>
-        <button class="theme-btn" id="themeLight" type="button" aria-pressed="false" aria-label="Light theme"><span class="theme-dot light"></span></button>
+        <button class="theme-btn active" id="themeDark" type="button" aria-pressed="true" aria-label="Dark theme"><span class="theme-glyph">0</span></button>
+        <button class="theme-btn" id="themeLight" type="button" aria-pressed="false" aria-label="Light theme"><span class="theme-glyph">1</span></button>
       </div>
     </div>
 
