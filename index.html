@@ -77,7 +77,8 @@
     body{
       background:var(--body-bg);
       color:var(--text);
-      font-family:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
+      font-family:'IBM Plex Mono',monospace;
+      font-synthesis:none;
       min-height:100%;
       overflow-x:hidden;
       overflow-y:auto;
@@ -85,6 +86,9 @@
       -webkit-font-smoothing:antialiased;
       transition:background .28s ease, color .22s ease;
     }
+    html,body,button,table,input,textarea{font-family:'IBM Plex Mono',monospace;font-synthesis:none}
+    .advisory-table,.advisory-table th,.advisory-table td,.advisory-table a,.vendor-name,.advisory-cve,.advisory-component,.advisory-type{font-family:'IBM Plex Mono',monospace;font-weight:400;font-style:normal}
+
     ::selection{ background:var(--selection); }
 
     canvas{
@@ -133,7 +137,7 @@
 
     h1{
       font-size:clamp(2rem, 5vw, 3.2rem);
-      font-weight:500;
+      font-weight:400;
       letter-spacing:-0.055em;
       line-height:1.15;
       margin-bottom:1.5rem;
