@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Franco Belman — restricted.systems</title>
-  <link rel="preload" href="/fonts/IBMPlexMono-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="./fonts/IBMPlexMono-Regular.woff2" as="font" type="font/woff2" crossorigin>
   <style>
     @font-face{
       font-family:'IBM Plex Mono';
@@ -78,8 +78,10 @@
       background:var(--body-bg);
       color:var(--text);
       font-family:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
-      height:100vh;
-      overflow:hidden;
+      min-height:100%;
+      overflow-x:hidden;
+      overflow-y:auto;
+      -webkit-overflow-scrolling:touch;
       -webkit-font-smoothing:antialiased;
       transition:background .28s ease, color .22s ease;
     }
@@ -96,11 +98,13 @@
     .content{
       position:relative;
       z-index:1;
-      height:100vh;
+      min-height:100vh;
+      min-height:100svh;
       display:flex;
       flex-direction:column;
-      justify-content:space-between;
+      justify-content:flex-start;
       padding:3rem;
+      padding-bottom:4rem;
     }
 
     .topbar{
@@ -119,7 +123,7 @@
       transition:color .22s ease;
     }
 
-    main{ max-width:1080px; }
+    main{ width:100%; max-width:1080px; }
 
     .panel-stack{display:flex;flex-direction:column;align-items:flex-start;gap:.46rem;margin-left:0}
 
@@ -223,18 +227,21 @@
     footer{ min-height:1px; }
 
     @media (max-width:600px){
-      .content{ padding:2rem; }
+      .content{min-height:100svh;padding:1.35rem 1.1rem 2.5rem}
       .topbar{ gap:.65rem; }
-      .panel-stack{ gap:.84rem; margin-left:-.08rem; }
+      .panel-stack{width:100%;gap:.84rem;margin-left:0}
       .panel-card{
-        max-width:min(100%, 92vw);
+        width:100%;
+        max-width:100%;
+        margin-left:0;
         padding:.74rem .8rem .78rem .76rem;
       }
       .panel-hero{
-        max-width:min(100%, 92vw);
+        width:100%;
+        max-width:100%;
         padding:.84rem .86rem .88rem .78rem;
       }
-      .advisories{width:min(100%,92vw)}
+      .advisories{width:100%;max-width:100%}
       .advisory-table,.advisory-table tbody,.advisory-table tr,.advisory-table td{display:block;width:100%}
       .advisory-table colgroup,.advisory-table thead{display:none}
       .advisory-table tr{display:grid;grid-template-columns:1fr auto;gap:.14rem .7rem;padding:.48rem 0;border-bottom:1px solid rgba(128,150,165,.11)}
@@ -245,7 +252,9 @@
       .advisory-table td:nth-child(3),.advisory-table td:nth-child(4){grid-column:1 / -1}
       .advisory-cve{font-size:.72rem}
       .advisory-component{font-size:.74rem}
-      .advisory-type{font-size:.58rem}
+      .advisory-type{font-size:.58rem;white-space:normal;line-height:1.35}
+      .advisory-component{overflow-wrap:anywhere;word-break:break-word}
+      .recon{display:none}
       .theme-btn{padding:0}
       .theme-glyph{font-size:.58rem}
       .recon{
