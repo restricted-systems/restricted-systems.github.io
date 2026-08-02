@@ -69,7 +69,7 @@
     body{
       background:var(--body-bg);
       color:var(--text);
-      font-family:-apple-system, BlinkMacSystemFont, 'Inter', 'Helvetica Neue', sans-serif;
+      font-family:'SFMono-Regular','SF Mono','Cascadia Code','Roboto Mono','Fira Code','JetBrains Mono',ui-monospace,Menlo,Monaco,Consolas,'Liberation Mono',monospace;
       height:100vh;
       overflow:hidden;
       -webkit-font-smoothing:antialiased;
@@ -121,21 +121,40 @@
 
     h1{
       font-size:clamp(2rem, 5vw, 3.2rem);
-      font-weight:300;
-      letter-spacing:-0.03em;
+      font-weight:500;
+      letter-spacing:-0.055em;
       line-height:1.15;
       margin-bottom:1.5rem;
       color:var(--heading);
       transition:color .22s ease;
     }
 
-    p{color:var(--copy);font-size:1.1rem;font-weight:300;line-height:1.34;transition:color .22s ease}
+    p{color:var(--copy);font-size:1.02rem;font-weight:400;line-height:1.5;letter-spacing:-0.015em;transition:color .22s ease}
 
     .section-title{font-family:'SF Mono','Fira Code',monospace;font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:var(--ghost);margin-bottom:.22rem;line-height:1.15;text-align:left;transition:color .22s ease}
 
-    .research-link{color:var(--link);font-size:.9rem;font-weight:300;display:block;line-height:1.30;text-align:left;transition:color .22s ease}
+    .research-link{color:var(--link);font-size:.86rem;font-weight:400;display:block;line-height:1.42;letter-spacing:-0.012em;text-align:left;transition:color .22s ease}
 
-    .links{display:flex;align-items:center;gap:1rem;font-size:.9rem;font-weight:300;line-height:1.30;text-align:left}
+
+    .advisories{width:min(100%,46rem)}
+    .advisory-table{width:100%;margin-top:.3rem;border-collapse:collapse;table-layout:fixed}
+    .advisory-table col{width:25%}
+    .advisory-table th{padding:.14rem .42rem .34rem;border-bottom:1px solid rgba(128,150,165,.14);font-size:.53rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ghost);text-align:left;white-space:nowrap}
+    .advisory-table td{padding:.44rem .42rem;border-bottom:1px solid rgba(128,150,165,.11);font-size:.79rem;line-height:1.22;vertical-align:middle;text-align:left}
+    .advisory-table th:first-child,.advisory-table td:first-child{padding-left:0}
+    .advisory-table th:last-child,.advisory-table td:last-child{padding-right:0}
+    .advisory-table tbody tr:last-child td{border-bottom:0}
+    .advisory-table a{display:block;color:inherit}
+    .advisory-vendor-col{display:flex;align-items:center;gap:.58rem;min-width:0;color:var(--text)}
+    .vendor-logo{display:inline-flex;align-items:center;justify-content:center;width:1.05rem;height:1.05rem;flex:0 0 1.05rem;color:var(--heading);opacity:.92}
+    .vendor-logo svg{display:block;width:100%;height:100%;fill:currentColor;stroke:currentColor}
+    .vendor-name{font-size:.72rem;font-weight:500;letter-spacing:.01em;color:var(--heading);white-space:nowrap}
+    .advisory-cve{color:var(--heading);font-weight:600;white-space:nowrap}
+    .advisory-component{color:var(--copy);overflow-wrap:anywhere}
+    .advisory-type{color:var(--muted);font-size:.64rem;font-weight:600;letter-spacing:.055em;text-transform:uppercase;white-space:nowrap}
+    .advisory-table tbody tr:hover .advisory-cve,.advisory-table tbody tr:hover .advisory-type,.advisory-table tbody tr:hover .vendor-name{color:var(--link-hover)}
+
+    .links{display:flex;align-items:center;gap:1rem;font-size:.86rem;font-weight:400;line-height:1.42;letter-spacing:-0.012em;text-align:left}
 
     a{
       color:var(--muted);
@@ -207,6 +226,18 @@
         max-width:min(100%, 92vw);
         padding:.84rem .86rem .88rem .78rem;
       }
+      .advisories{width:min(100%,92vw)}
+      .advisory-table,.advisory-table tbody,.advisory-table tr,.advisory-table td{display:block;width:100%}
+      .advisory-table colgroup,.advisory-table thead{display:none}
+      .advisory-table tr{display:grid;grid-template-columns:1fr auto;gap:.14rem .7rem;padding:.48rem 0;border-bottom:1px solid rgba(128,150,165,.11)}
+      .advisory-table tbody tr:last-child{border-bottom:0}
+      .advisory-table td{padding:0;border:0}
+      .advisory-table td:nth-child(1){grid-column:1 / 2}
+      .advisory-table td:nth-child(2){grid-column:2 / 3;text-align:right}
+      .advisory-table td:nth-child(3),.advisory-table td:nth-child(4){grid-column:1 / -1}
+      .advisory-cve{font-size:.72rem}
+      .advisory-component{font-size:.74rem}
+      .advisory-type{font-size:.58rem}
       .theme-btn{padding:0}
       .theme-glyph{font-size:.58rem}
       .recon{
@@ -256,14 +287,63 @@
           <a href="https://blackwinghq.com/blog/posts/finding-vulnerability-variants-at-scale/" class="research-link">Finding Vulnerability Variants at Scale</a>
         </section>
 
-        <section class="panel-card">
+        <section class="panel-card advisories">
           <div class="section-title">Advisories</div>
-          <a href="https://support.apple.com/en-us/128067" class="research-link">CVE-2026-64762 — Apple — AVEVideoEncoder (AppleAVE2) — Kernel Out-of-bounds Read</a>
-          <a href="https://support.apple.com/en-us/128067" class="research-link">CVE-2026-64747 — Apple — AVEVideoEncoder (AppleAVE2) — Kernel Controlled Write</a>
-          <a href="https://support.apple.com/en-us/128067" class="research-link">CVE-2026-43748 — Apple — Apple Neural Engine (AppleH11ANEInterface) — Kernel Out-of-bounds Write</a>
-          <a href="https://support.apple.com/en-us/128067" class="research-link">CVE-2026-43816 — Apple — Kernel (AppleJPEGDriver) — Kernel Out-of-bounds Write</a>
-          <a href="https://github.com/wireapp/wire-ios/security/advisories/GHSA-v6wg-c7qc-x66g" class="research-link">CVE-2026-35049 — Wire — Persistent Remote DoS via Integer Underflow</a>
-          <a href="https://github.com/advisories/GHSA-6r2x-8pq8-9489" class="research-link">CVE-2024-46993 — Electron — Heap Buffer Overflow</a>
+
+          <table class="advisory-table">
+            <colgroup>
+              <col class="vendor">
+              <col class="cve">
+              <col class="component">
+              <col class="class">
+            </colgroup>
+            <thead>
+              <tr>
+                <th scope="col">Vendor</th>
+                <th scope="col">CVE</th>
+                <th scope="col">Component</th>
+                <th scope="col">Class</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><a href="https://support.apple.com/en-us/128067"><span class="advisory-vendor-col"><span class="vendor-logo" aria-hidden="true"><svg viewBox="0 0 24 24" role="img"><path d="M16.8 12.7c0-2.1 1.7-3.1 1.8-3.2-1-.9-2.4-1-2.9-1-.8-.1-1.8.5-2.3.5-.6 0-1.4-.5-2.2-.5-1.2 0-2.2.7-2.8 1.7-1.2 2-.3 5 1 6.9.6.9 1.3 1.9 2.3 1.8.9 0 1.3-.5 2.4-.5s1.5.5 2.4.5c1 0 1.7-.9 2.3-1.8.7-1 1-2.1 1-2.1-.1 0-3-.9-3-3.3zm-1.8-5.4c.5-.6.9-1.4.8-2.3-.8 0-1.6.5-2.2 1.1-.5.5-.9 1.4-.8 2.2.9.1 1.7-.4 2.2-1z"></path></svg></span><span class="vendor-name">Apple</span></span></a></td>
+                <td><a href="https://support.apple.com/en-us/128067" class="advisory-cve">CVE-2026-64747</a></td>
+                <td><a href="https://support.apple.com/en-us/128067" class="advisory-component">AVEVideoEncoder / AppleAVE2</a></td>
+                <td><a href="https://support.apple.com/en-us/128067" class="advisory-type">Controlled Write</a></td>
+              </tr>
+              <tr>
+                <td><a href="https://support.apple.com/en-us/128067"><span class="advisory-vendor-col"><span class="vendor-logo" aria-hidden="true"><svg viewBox="0 0 24 24" role="img"><path d="M16.8 12.7c0-2.1 1.7-3.1 1.8-3.2-1-.9-2.4-1-2.9-1-.8-.1-1.8.5-2.3.5-.6 0-1.4-.5-2.2-.5-1.2 0-2.2.7-2.8 1.7-1.2 2-.3 5 1 6.9.6.9 1.3 1.9 2.3 1.8.9 0 1.3-.5 2.4-.5s1.5.5 2.4.5c1 0 1.7-.9 2.3-1.8.7-1 1-2.1 1-2.1-.1 0-3-.9-3-3.3zm-1.8-5.4c.5-.6.9-1.4.8-2.3-.8 0-1.6.5-2.2 1.1-.5.5-.9 1.4-.8 2.2.9.1 1.7-.4 2.2-1z"></path></svg></span><span class="vendor-name">Apple</span></span></a></td>
+                <td><a href="https://support.apple.com/en-us/128067" class="advisory-cve">CVE-2026-64762</a></td>
+                <td><a href="https://support.apple.com/en-us/128067" class="advisory-component">AVEVideoEncoder / AppleAVE2</a></td>
+                <td><a href="https://support.apple.com/en-us/128067" class="advisory-type">OOB Read</a></td>
+              </tr>
+              <tr>
+                <td><a href="https://support.apple.com/en-us/128067"><span class="advisory-vendor-col"><span class="vendor-logo" aria-hidden="true"><svg viewBox="0 0 24 24" role="img"><path d="M16.8 12.7c0-2.1 1.7-3.1 1.8-3.2-1-.9-2.4-1-2.9-1-.8-.1-1.8.5-2.3.5-.6 0-1.4-.5-2.2-.5-1.2 0-2.2.7-2.8 1.7-1.2 2-.3 5 1 6.9.6.9 1.3 1.9 2.3 1.8.9 0 1.3-.5 2.4-.5s1.5.5 2.4.5c1 0 1.7-.9 2.3-1.8.7-1 1-2.1 1-2.1-.1 0-3-.9-3-3.3zm-1.8-5.4c.5-.6.9-1.4.8-2.3-.8 0-1.6.5-2.2 1.1-.5.5-.9 1.4-.8 2.2.9.1 1.7-.4 2.2-1z"></path></svg></span><span class="vendor-name">Apple</span></span></a></td>
+                <td><a href="https://support.apple.com/en-us/128067" class="advisory-cve">CVE-2026-43748</a></td>
+                <td><a href="https://support.apple.com/en-us/128067" class="advisory-component">AppleH11ANEInterface</a></td>
+                <td><a href="https://support.apple.com/en-us/128067" class="advisory-type">OOB Write</a></td>
+              </tr>
+              <tr>
+                <td><a href="https://support.apple.com/en-us/128067"><span class="advisory-vendor-col"><span class="vendor-logo" aria-hidden="true"><svg viewBox="0 0 24 24" role="img"><path d="M16.8 12.7c0-2.1 1.7-3.1 1.8-3.2-1-.9-2.4-1-2.9-1-.8-.1-1.8.5-2.3.5-.6 0-1.4-.5-2.2-.5-1.2 0-2.2.7-2.8 1.7-1.2 2-.3 5 1 6.9.6.9 1.3 1.9 2.3 1.8.9 0 1.3-.5 2.4-.5s1.5.5 2.4.5c1 0 1.7-.9 2.3-1.8.7-1 1-2.1 1-2.1-.1 0-3-.9-3-3.3zm-1.8-5.4c.5-.6.9-1.4.8-2.3-.8 0-1.6.5-2.2 1.1-.5.5-.9 1.4-.8 2.2.9.1 1.7-.4 2.2-1z"></path></svg></span><span class="vendor-name">Apple</span></span></a></td>
+                <td><a href="https://support.apple.com/en-us/128067" class="advisory-cve">CVE-2026-43816</a></td>
+                <td><a href="https://support.apple.com/en-us/128067" class="advisory-component">AppleJPEGDriver</a></td>
+                <td><a href="https://support.apple.com/en-us/128067" class="advisory-type">OOB Write</a></td>
+              </tr>
+              <tr>
+                <td><a href="https://github.com/wireapp/wire-ios/security/advisories/GHSA-v6wg-c7qc-x66g"><span class="advisory-vendor-col"><span class="vendor-logo" aria-hidden="true"><svg viewBox="0 0 24 24" role="img"><rect x="3" y="3" width="18" height="18" rx="4" ry="4" fill="none" stroke-width="1.6"></rect><path d="M7 8l1.9 8 3.1-5 3.1 5 1.9-8" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg></span><span class="vendor-name">Wire</span></span></a></td>
+                <td><a href="https://github.com/wireapp/wire-ios/security/advisories/GHSA-v6wg-c7qc-x66g" class="advisory-cve">CVE-2026-35049</a></td>
+                <td><a href="https://github.com/wireapp/wire-ios/security/advisories/GHSA-v6wg-c7qc-x66g" class="advisory-component">Wire iOS</a></td>
+                <td><a href="https://github.com/wireapp/wire-ios/security/advisories/GHSA-v6wg-c7qc-x66g" class="advisory-type">Remote DoS</a></td>
+              </tr>
+              <tr>
+                <td><a href="https://github.com/advisories/GHSA-6r2x-8pq8-9489"><span class="advisory-vendor-col"><span class="vendor-logo" aria-hidden="true"><svg viewBox="0 0 24 24" role="img"><ellipse cx="12" cy="12" rx="8.2" ry="3.9" fill="none" stroke-width="1.3"></ellipse><ellipse cx="12" cy="12" rx="8.2" ry="3.9" fill="none" stroke-width="1.3" transform="rotate(60 12 12)"></ellipse><ellipse cx="12" cy="12" rx="8.2" ry="3.9" fill="none" stroke-width="1.3" transform="rotate(120 12 12)"></ellipse><circle cx="12" cy="12" r="1.6"></circle></svg></span><span class="vendor-name">Electron</span></span></a></td>
+                <td><a href="https://github.com/advisories/GHSA-6r2x-8pq8-9489" class="advisory-cve">CVE-2024-46993</a></td>
+                <td><a href="https://github.com/advisories/GHSA-6r2x-8pq8-9489" class="advisory-component">Electron</a></td>
+                <td><a href="https://github.com/advisories/GHSA-6r2x-8pq8-9489" class="advisory-type">Heap Overflow</a></td>
+              </tr>
+            </tbody>
+          </table>
         </section>
       </div>
     </main>
